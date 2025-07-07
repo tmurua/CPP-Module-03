@@ -6,13 +6,50 @@
 /*   By: tmurua <tmurua@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 10:49:35 by tmurua            #+#    #+#             */
-/*   Updated: 2025/06/29 19:40:15 by tmurua           ###   ########.fr       */
+/*   Updated: 2025/07/07 19:25:34 by tmurua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClapTrap.hpp"
 
-// Protected setters and getters implementations
+// constructor: initializes name and default attribute values
+ClapTrap::ClapTrap(const std::string &_name) : name(_name), hitPoints(10),
+	energyPoints(10), attackDamage(0)
+{
+	std::cout << "ClapTrap " << name << " constructed" << std::endl;
+}
+
+// copy constructor: implements deep copy of another ClapTrap's state
+ClapTrap::ClapTrap(const ClapTrap& other)
+	: name(other.name)
+	, hitPoints(other.hitPoints)
+	, energyPoints(other.energyPoints)
+	, attackDamage(other.attackDamage)
+{
+	std::cout << "ClapTrap " << name << " copy-constructed\n";
+}
+
+// copy assignment operator: assigns one existing ClapTrap into another (a = b;)
+ClapTrap& ClapTrap::operator=(const ClapTrap& other)
+{
+	if (this != &other) {
+		name         = other.name;
+		hitPoints    = other.hitPoints;
+		energyPoints = other.energyPoints;
+		attackDamage = other.attackDamage;
+	}
+	std::cout << "ClapTrap " << name << " copy-assigned\n";
+	return *this;
+}
+
+// destructor: announces destruction
+ClapTrap::~ClapTrap()
+{
+	std::cout << "ClapTrap " << name << " destroyed" << std::endl;
+}
+
+
+// protected setters and getters implementations
 void ClapTrap::setHitPoints(unsigned int hp)
 {
 	hitPoints = hp;
@@ -42,20 +79,8 @@ const std::string &ClapTrap::getName() const
 	return (name);
 }
 
-// Constructor: initializes name and default attribute values
-ClapTrap::ClapTrap(const std::string &_name) : name(_name), hitPoints(10),
-	energyPoints(10), attackDamage(0)
-{
-	std::cout << "ClapTrap " << name << " constructed" << std::endl;
-}
 
-// Destructor: announces destruction
-ClapTrap::~ClapTrap()
-{
-	std::cout << "ClapTrap " << name << " destroyed" << std::endl;
-}
-
-// Attack function: spends 1 energy point to damage target
+// attack function: spends 1 energy point to damage target
 void ClapTrap::attack(const std::string &target)
 {
 	if (hitPoints == 0)
@@ -72,7 +97,7 @@ void ClapTrap::attack(const std::string &target)
 	}
 	--energyPoints;
 	std::cout << "ClapTrap " << name << " attacks " << target
-		<< ",causing " << attackDamage << " points of damage!" << std::endl;
+		<< ", causing " << attackDamage << " points of damage!" << std::endl;
 }
 
 // takeDamage: reduce hitPoints by amount (not below zero)
@@ -103,6 +128,6 @@ void ClapTrap::beRepaired(unsigned int amount)
 	}
 	--energyPoints;
 	hitPoints += amount;
-	std::cout << "ClapTrap " << name << " repairs for " << amount
-		<< " points," << hitPoints << " HP now." << std::endl;
+	std::cout << "ClapTrap " << name << " repairs for " << amount << " EP, "
+		<< hitPoints << " HP and " << energyPoints << " EP now." << std::endl;
 }
